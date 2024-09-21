@@ -1,3 +1,29 @@
+// const express = require("express");
+// const cors = require("cors");
+// require("dotenv").config();
+// require("./db/conn");
+// const userRouter = require("./routes/userRoutes");
+// const doctorRouter = require("./routes/doctorRoutes");
+// const appointRouter = require("./routes/appointRoutes");
+// const path = require("path");
+// const notificationRouter = require("./routes/notificationRouter");
+
+// const app = express();
+// const port = process.env.PORT || 5000;
+
+// app.use(cors());
+// app.use(express.json());
+// app.use("/api/user", userRouter);
+// app.use("/api/doctor", doctorRouter);
+// app.use("/api/appointment", appointRouter);
+// app.use("/api/notification", notificationRouter);
+// app.use(express.static(path.join(__dirname, "./client/build")));
+
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "./client/build/index.html"));
+// });
+
+// app.listen(port, () => {});
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -11,7 +37,14 @@ const notificationRouter = require("./routes/notificationRouter");
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors());
+// CORS configuration
+const corsOptions = {
+  origin: "https://sensational-duckanoo-6954cc.netlify.app", // Allow only this origin
+  methods: ["GET", "POST", "PUT", "DELETE"], // Allow specific methods if necessary
+  credentials: true, // Allow credentials if needed
+};
+
+app.use(cors(corsOptions)); // Apply CORS middleware with options
 app.use(express.json());
 app.use("/api/user", userRouter);
 app.use("/api/doctor", doctorRouter);
@@ -19,8 +52,11 @@ app.use("/api/appointment", appointRouter);
 app.use("/api/notification", notificationRouter);
 app.use(express.static(path.join(__dirname, "./client/build")));
 
+// Fallback route for React app
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
-app.listen(port, () => {});
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
